@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="styletodo.css"> <!-- Pastikan ini mengarah ke file CSS Anda -->
+</head>
+<body>
+    <div class="container">
+        <h1>To-Do List</h1>
+        <div class="input-section">
+            <input type="text" id="todo-input" placeholder="Tambahkan tugas...">
+            <button onclick="addTodo()" id="btn-tambah">Tambah</button>
+        </div>
+        <ul id="todo-list"></ul>
+        <div class="response"></div>
+        <button onclick="logout()" id="btn-out">Log Out</button>
+    </div>
+
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <script src="script.js"></script> Pastikan ini mengarah ke file JavaScript Anda
+</body>
+</html>
