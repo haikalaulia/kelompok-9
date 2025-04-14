@@ -1,201 +1,182 @@
 $(document).ready(function () {
     var todoList = $('#todo-list');
-    let username = localStorage.getItem("username");
-    
+    let token = localStorage.getItem("token");
 
+    // Fetch all todos
     $.ajax({
-        
-        url: 'http://localhost/UTS_prak/API/read_all_todo.php', // URL tempat mengirim data
-        type: 'POST',      // Menggunakan metode POST
+        url: 'https://api-todo-list-pbw.vercel.app/todo/getAllTodos',
+        type: 'GET',
         dataType: "json",
-        data: {
-            username: username,
+        headers: {
+            Authorization: `Bearer ${token}`
         },
-
-        beforeSend: function () {
-            
-        },
-
         success: function (response) {
-            console.log(response);
             if (response.status) {
-                for (let i = 0; i < response.data.length; i++) {
-                    const data = response.data[i];
+                response.data.forEach(function (data) {
                     let li = document.createElement("li");
-                li.innerHTML = `
-                    <span>${data.todo}</span>
-                    <div>
-                        <button class="edit-btn" onclick="editTodo(this, ${data.id})">Edit</button>
-                        <button class="delete-btn" onclick="deleteTodo(this, ${data.id})">Hapus</button>
-                    </div>
-                `;
-
-                document.getElementById("todo-list").appendChild(li);
-                    
-                }
-            //     
-            //     $("#todo-input").val();
+                    li.innerHTML = `
+                        <span>${data.text}</span>
+                        <div>
+                            <button class="edit-btn" onclick="editTodo(this, '${data._id}')">Edit</button>
+                            <button class="delete-btn" onclick="deleteTodo(this, '${data._id}')">Hapus</button>
+                        </div>
+                    `;
+                    document.getElementById("todo-list").appendChild(li);
+                });
             } else {
-                // Jika ada error saat request
-                $('.response').html("error");
+                $('.response').html("Error: " + response.pesan);
             }
-
         },
         error: function (xhr, status, error) {
-            var btnTambah = $("#btn-tambah");
-            btnTambah.text("Tambah")
-            // Jika ada error saat request
+            console.log("Error Response:", xhr.responseText);
             $('.response').html('Error: ' + xhr.status + ' ' + error);
         }
     });
-
 });
 
 function addTodo() {
+    let todo = $("#todo-input").val();
+    let token = localStorage.getItem("token");
 
-    let username = localStorage.getItem("username");
-    var todo = $("#todo-input").val();
-    if (!username || !todo) {
-        return alert("todo tidak boleh kosong")
+    if (!todo) {
+        return alert("Todo tidak boleh kosong");
     }
 
-    // AJAX Request
     $.ajax({
-        url: 'http://localhost/UTS_prak/API/add_todo.php', // URL tempat mengirim data
-        type: 'POST',      // Menggunakan metode POST
+        url: 'https://api-todo-list-pbw.vercel.app/todo/createTodo',
+        type: 'POST',
         dataType: "json",
-        data: {
-            username: username,
-            todo: todo
+        headers: {
+            Authorization: `Bearer ${token}`
         },
-
+        contentType: "application/json",
+        data: JSON.stringify({
+            text: todo
+        }),
         beforeSend: function () {
-            var btnTambah = $("#btn-tambah");
-            btnTambah.text("mohon tunggu")
+            $("#btn-tambah").text("Mohon tunggu...");
         },
-
         success: function (response) {
-            var btnTambah = $("#btn-tambah");
-            btnTambah.text("Tambah")
+            $("#btn-tambah").text("Tambah");
             if (response.status) {
-                console.log(response.pesan)
                 let li = document.createElement("li");
                 li.innerHTML = `
                     <span>${todo}</span>
                     <div>
-                        <button class="edit-btn" onclick="editTodo(this, ${response.data.id})">Edit</button>
-                        <button class="delete-btn" onclick="deleteTodo(this, ${response.data.id})">Hapus</button>
+                        <button class="edit-btn" onclick="editTodo(this, '${response.data._id}')">Edit</button>
+                        <button class="delete-btn" onclick="deleteTodo(this, '${response.data._id}')">Hapus</button>
                     </div>
                 `;
-
                 document.getElementById("todo-list").appendChild(li);
-                $("#todo-input").val();
+                $("#todo-input").val('');
             } else {
-                // Jika ada error saat request
-                $('.response').html("error");
+                $('.response').html("Error: " + response.pesan);
             }
-
         },
         error: function (xhr, status, error) {
-            var btnTambah = $("#btn-tambah");
-            btnTambah.text("Tambah")
-            // Jika ada error saat request
+            $("#btn-tambah").text("Tambah");
+            console.log("Error Response:", xhr.responseText);
             $('.response').html('Error: ' + xhr.status + ' ' + error);
         }
     });
-
-
 }
 
 function deleteTodo(button, id) {
-    // let li = button.parentElement.parentElement;
-    // li.remove();
+    let token = localStorage.getItem("token");
+
+    if (!id) {
+        alert("ID tidak ditemukan.");
+        return;
+    }
 
     $.ajax({
-        url: 'http://localhost/UTS_prak/API/delete_todo.php', // URL tempat mengirim data
-        type: 'POST',      // Menggunakan metode POST
+        url: `https://api-todo-list-pbw.vercel.app/todo/deleteTodo/${id}`,
+        type: 'DELETE',
         dataType: "json",
-        data: {
-            id : id
+        headers: {
+            Authorization: `Bearer ${token}`
         },
-
-        beforeSend: function () {
-            button.text="mohon tunggu"
-        },
-
         success: function (response) {
-            button.text="Hapus"     
             if (response.status) {
                 let li = button.parentElement.parentElement;
                 li.remove();
             } else {
-                // Jika ada error saat request
-                // $('.response').html("err");
-                alert(response.pesan)
+                alert(response.pesan);
             }
-
         },
-    })
+        error: function (xhr, status, error) {
+            console.log("Error Response:", xhr.responseText);
+            alert('Error: ' + xhr.status + ' ' + error);
+        }
+    });
 }
 
 function editTodo(button, id) {
+    if (!id) {
+        alert("ID tidak ditemukan.");
+        return;
+    }
     let li = button.parentElement.parentElement;
     let span = li.querySelector("span");
     let currentText = span.textContent;
 
-    // Mengganti span dengan input
     span.innerHTML = `<input type="text" value="${currentText}" />`;
-    button.textContent = "Simpan"; // Mengubah teks tombol menjadi "Simpan"
-    button.setAttribute("onclick", `saveTodo(this, ${id})`); // Mengubah fungsi onclick
+    button.textContent = "Simpan";
+    button.setAttribute("onclick", `saveTodo(this, '${id}')`);
 }
 
 function saveTodo(button, id) {
-    console.log('sasveTodo')
-
     let li = button.parentElement.parentElement;
     let input = li.querySelector("input");
     let newText = input.value.trim();
+    let token = localStorage.getItem("token");
 
-    if (newText == "") {
+    if (newText === "") {
         return alert("Tugas tidak boleh kosong!");
     }
 
+
+    let fromData = new FormData();
+    fromData.append('text', newText);
+    fromData.append('onCheckList', false)
+
     $.ajax({
-        url: 'http://localhost/UTS_prak/API/edit_todo.php', // URL tempat mengirim data
-        type: 'POST',      // Menggunakan metode POST
+        url: `https://api-todo-list-pbw.vercel.app/todo/updateTodo/${id}`,
+        type: 'PUT',
         dataType: "json",
-        data: {
-            id : id,
-            newText : newText
-        },
-
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+        data: JSON.stringify({
+            text: newText,
+            onCheckList: true
+          }),
+        processData: false,        // penting: jangan ubah jadi query string
+        contentType: false,        // penting: biar FormData bikin header-nya sendiri
         beforeSend: function () {
-            button.text="mohon tunggu"
+            button.textContent = "Mohon tunggu...";
         },
-
-        success: function (response) {  
+        success: function (response) {
             if (response.status) {
-                li.querySelector("span").textContent = newText; // Mengupdate teks span
-                
+                li.querySelector("span").textContent = newText;
+                button.textContent = "Edit";
+                button.setAttribute("onclick", `editTodo(this, '${id}')`);
             } else {
-                // Jika ada error saat request
-                // $('.response').html("err");
-                alert(response.pesan)
+                alert(response.message || "Gagal mengupdate");
             }
-
         },
-    })
+        error: function (xhr, status, error) {
+            console.log("Error Response:", xhr.responseText);
+            alert('Error: ' + xhr.status + ' ' + error);
+        }
+    });
+}
 
+
+function logout() {
+    localStorage.clear();
+                window.location.href = 'index.html';
+}
     
 
-
-
-    button.textContent = "Edit"; // Mengubah kembali teks tombol menjadi "Edit"
-    button.setAttribute("onclick", `editTodo(this, ${id})`); // Mengubah kembali fungsi onclick
-}
-
-function logout(){
-    localStorage.clear();
-    window.location.href = 'index.html';
-
-}

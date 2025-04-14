@@ -10,11 +10,12 @@
 
 <body>
     <div class="container">
+        <!-- Login Form -->
         <div id="loginForm">
             <h1>Login</h1>
             <form onsubmit="return handleLogin(event)">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
                 <button type="submit" id="button-login">Login</button>
@@ -23,11 +24,14 @@
             <p>Belum punya akun? <a href="#" onclick="toggleForms('register')">Registrasi di sini</a></p>
         </div>
 
+        <!-- Register Form -->
         <div id="register" class="hidden">
             <h1>Registrasi</h1>
             <form onsubmit="return handleRegister(event)">
-                <label for="regUsername">Username:</label>
-                <input type="text" id="regUsername" name="regUsername" required>
+                <label for="regFullname">Fullname:</label>
+                <input type="text" id="regFullname" name="regFullname" required>
+                <label for="regEmail">Email:</label>
+                <input type="email" id="regEmail" name="regEmail" required>
                 <label for="regPassword">Password:</label>
                 <input type="password" id="regPassword" name="regPassword" required>
                 <button type="submit" id="btn-regis">Registrasi</button>
@@ -36,8 +40,7 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     <script>
         function toggleForms(form) {
@@ -54,100 +57,78 @@
         }
 
         function handleLogin(event) {
-            event.preventDefault(); // Mencegah pengiriman form
-            // Ambil data dari form
+            event.preventDefault();
 
-            var username = $("#username").val();
+            var email = $("#email").val();
             var password = $("#password").val();
-            if (!username || !password) {
-                return alert("password harus disi")
+
+            if (!email || !password) {
+                return alert("Kolom email dan password harus diisi!");
             }
 
-            // AJAX Request
             $.ajax({
-                url: 'http://localhost/UTS_prak/API/login.php', // URL tempat mengirim data
-                type: 'POST',      // Menggunakan metode POST
-                dataType: "json",
+                url: 'https://api-todo-list-pbw.vercel.app/auth/login',
+                type: 'POST',
+                dataType: 'json',
                 data: {
-                    username: username,
+                    email: email,
                     password: password
                 },
-
                 beforeSend: function () {
-                    var buttonLogin = $("#button-login");
-                    buttonLogin.text("mohon tunggu")
+                    $("#button-login").text("Mohon tunggu...");
                 },
-                
                 success: function (response) {
-                    console.log(response);
-                    var buttonLogin = $("#button-login");
-                    buttonLogin.text("Login")
-                    if (response) {
-                        localStorage.setItem("username", response.username);
-                        // Menampilkan respon dari server
-                        window.location.href = 'todo.html'; // Arahkan ke halaman To-Do List
-                    } else {
-                        // Jika ada error saat request
-                        $('.response').html("user atau password salah");
-                    }
+                    $("#button-login").text("Login");
 
+                    if (response.status) {
+                        localStorage.setItem("token", response.data.token);
+                        localStorage.setItem("email", response.data.email);
+
+                        window.location.href = "todo.html";
+                    } else {
+                        alert("Login gagal: " + response.message);
+                    }
                 },
                 error: function (xhr, status, error) {
-                    var buttonLogin = $("#button-login");
-                    buttonLogin.text("Login")
-                    // Jika ada error saat request
-                    $('.response').html('Error: ' + xhr.status + ' ' + error);
+                    $("#button-login").text("Login");
+                    $('.response').html('Error: ' + xhr.status + ' - ' + error);
                 }
             });
-
-            // // Logika login bisa ditambahkan di sini (misalnya, validasi)
-            // window.location.href = 'todo.html'; // Arahkan ke halaman To-Do List
         }
 
         function handleRegister(event) {
-            event.preventDefault(); // Mencegah pengiriman form
-            // Ambil data dari form
+            event.preventDefault();
 
-            var username = $("#regUsername").val();
+            var fullname = $("#regFullname").val();
+            var email = $("#regEmail").val();
             var password = $("#regPassword").val();
-            if (!username || !password) {
-                return alert("password harus disi")
+            if (!fullname || !email || !password) {
+                return alert("Kolom fullname, email, dan password harus diisi!");
             }
 
-            // AJAX Request
             $.ajax({
-                url: 'http://localhost/UTS_prak/API/regis.php', // URL tempat mengirim data
-                type: 'POST',      // Menggunakan metode POST
+                url: 'https://api-todo-list-pbw.vercel.app/auth/register',
+                type: 'POST',
                 dataType: "json",
-                data: {
-                    username: username,
+                contentType: "application/json",
+                data: JSON.stringify({
+                    email: email,
+                    fullName: fullname,
                     password: password
-                },
-
+                }),
                 beforeSend: function () {
-                    var btnRegis = $("#btn-regis");
-                    btnRegis.text("mohon tunggu")
+                    $("#btn-regis").text("Mohon tunggu...");
                 },
-
                 success: function (response) {
-                    var btnRegis = $("#btn-regis");
-                    btnRegis.text("Registrasi")
-                    if (response) {
-                        toggleForms("");
-                    } else {
-                        // Jika ada error saat request
-                        $('.response').html("gagal registrasi");
-                    }
-
+                    $("#btn-regis").text("Registrasi");
+                    alert("Registrasi berhasil! Silakan login.");
+                    toggleForms('login');
                 },
                 error: function (xhr, status, error) {
-                    var btnRegis = $("#btn-regis");
-                    btnRegis.text("Registrasi")
-                    // Jika ada error saat request
-                    $('.response').html('Error: ' + xhr.status + ' ' + error);
+                    $("#btn-regis").text("Registrasi");
+                    alert('Registrasi gagal: ' + xhr.responseText);
                 }
             });
-
         }
     </script>
 </body>
