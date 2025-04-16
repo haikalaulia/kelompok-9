@@ -5,17 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do List</title>
     <link rel="stylesheet" href="styletodo.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Satisfy&display=swap" rel="stylesheet">
 </head>
 <body>
+    <header>
+        <div class="header-right">
+            <button class="logout-btn" onclick="logout()">
+                <img src="img/logout.png" alt="Logout Icon" class="logout-icon"> 
+            </button>
+        </div>
+    </header>
     <div class="container">
         <h1>To-Do List</h1>
+        <div class="notification" id="notification"></div> 
         <div class="input-section">
             <input type="text" id="todo-input" placeholder="Tambahkan tugas...">
             <button onclick="addTodo()">Tambah</button>
         </div>
         <ul id="todo-list"></ul>
         <div class="response"></div>
-        <button onclick="logout()">Log Out</button>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
