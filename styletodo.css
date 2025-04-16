@@ -176,4 +176,125 @@ button:hover {
     background-color: #ba55d3;
 }
 
+/* === LIST TUGAS === */
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 20px;
+    max-height: 600px; /* diperbesar */
+    overflow-y: auto; /* enable vertical scrolling */
+}
+
+li {
+    margin: 10px 0;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 12px;
+    font-weight: 500;
+    box-shadow: 0 0 8px #ffffffaa; /* neon putih */
+    border: 1px solid #ffffffaa; /* border putih neon tipis */
+}
+
+li:nth-child(odd) {
+    background-color: rgba(138, 43, 226, 0.6); /* increased transparency */
+    color: #fff;
+}
+
+li:nth-child(even) {
+    background-color: rgba(47, 47, 47, 0.6); /* increased transparency */
+    color: #fff;
+}
+
+li .text {
+    flex: 1;
+    margin-right: 40px; /* add more margin right to separate text from buttons */
+}
+
+/* === BUTTON EDIT & HAPUS === */
+.edit-btn {
+    background-color: #f9be3b;
+    color: #222;
+}
+
+.delete-btn {
+    background-color: #ef5b5b;
+    color: white;
+}
+
+button.edit-btn,
+button.delete-btn {
+    margin-left: 10px; /* add margin left to separate buttons */
+    padding: 4px 8px; /* memperkecil ukuran tombol */
+    border: none;
+    border-radius: 8px;
+    font-size: 12px; /* memperkecil ukuran font */
+    cursor: pointer;
+}
+
+button.edit-btn:hover {
+    background-color: #e3a100;
+}
+
+button.delete-btn:hover {
+    background-color: #cc3f3f;
+}
+
+/* === ERROR / RESPONSE TEXT === */
+.response {
+    margin-top: 10px;
+    color: red;
+    font-size: 13px;
+}
+
+/* === TOMBOL TAMBAH DI BAWAH === */
+button.add-btn {
+    display: block;
+    margin: 20px auto 0; /* center and add margin top */
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #fff;
+    background-color: #8a2be2;
+    border: 1px solid #ffffffaa; /* border putih neon */
+    border-radius: 12px;
+    box-shadow: 0 0 8px #ffffffaa;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    z-index: 20;
+    text-align: center; /* ensure button is centered */
+}
+
+button.add-btn:hover {
+    background-color: #ba55d3;
+    box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #8a2be2, 0 0 50px #8a2be2, 0 0 60px #8a2be2, 0 0 70px #8a2be2;
+}
+
+/* === TOMBOL LOGOUT DI TENGAH KOTAK === */
+button.logout-link {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #fff;
+    background-color: #8a2be2;
+    border: 1px solid #ffffffaa; /* border putih neon */
+    border-radius: 12px;
+    box-shadow: 0 0 8px #ffffffaa;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    z-index: 20;
+    text-align: center; /* ensure button is centered */
+}
+
+button.logout-link:hover {
+    background-color: #ba55d3;
+    box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #8a2be2, 0 0 50px #8a2be2, 0 0 60px #8a2be2, 0 0 70px #8a2be2;
+}
+
+
 
