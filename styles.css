@@ -67,5 +67,64 @@ h1 {
   text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff,
                0 0 40px #8a2be2, 0 0 50px #8a2be2, 0 0 60px #8a2be2, 0 0 70px #8a2be2;
 }
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #ccc;
+  
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #8a2be2;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  box-shadow: 0 0 10px #ffffffaa;
+  
+}
+
+button {
+  background: #8a2be2;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 2.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+  margin: 0 auto;
+  display: block;
+  max-width: 240px;
+  border: 1px solid #ffffffaa; 
+}
+
+button:hover {
+  background: #ba55d3;
+}
+
+.hidden {
+  display: none;
+}
+
+a {
+  color: #fff;
+  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff,
+               0 0 40px #8a2be2, 0 0 50px #8a2be2, 0 0 60px #8a2be2, 0 0 70px #8a2be2;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.response {
+  margin-top: 1rem;
+  color: red;
+}
 
 
