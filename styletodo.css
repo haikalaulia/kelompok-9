@@ -64,3 +64,116 @@ button.logout-link {
     display: none;
 }
 
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to bottom right, #1a1a2e, #16213e);
+    background-image: url('img/backkkk.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* make background fixed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* changed from height to min-height */
+    color: #fff;
+    overflow: auto; /* allow scrolling */
+    position: relative; /* added for pseudo element positioning */
+}
+
+body::before {
+    content: '';
+    position: fixed; /* changed to fixed */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('img/backkkk.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.2;
+    z-index: -1; /* ensure it is behind other content */
+}
+
+.container {
+    max-width: 1200px; /* diperlebar */
+    background: rgba(26, 26, 46, 0.6); /* increased transparency */
+    padding: 50px; /* diperbesar */
+    margin: 100px auto 50px;
+    border-radius: 25px; /* tetap ada border radius */
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); /* white glow */
+    border: 2px solid rgba(255, 255, 255, 0.4); /* border putih tipis */
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, #8a2be2, transparent);
+    opacity: 0.2; /* increased transparency */
+    animation: sciFiEffect 7s infinite;
+    z-index: -1;
+}
+
+@keyframes sciFiEffect {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+h1 {
+    color: #fff;
+    margin-bottom: 30px;
+    font-size: 24px;
+    text-align: center;
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #8a2be2, 0 0 50px #8a2be2, 0 0 60px #8a2be2, 0 0 70px #8a2be2;
+}
+
+.input-section {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 20px; /* add margin bottom */
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    border: 1px solid #ffffffaa;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    box-shadow: 0 0 8px #ffffffaa;
+}
+
+button {
+    padding: 10px 14px;
+    background-color: #8a2be2;
+    color: white;
+    border: 1px solid #ffffffaa;
+    border-radius: 12px;
+    box-shadow: 0 0 8px #ffffffaa;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #ba55d3;
+}
+
+
