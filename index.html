@@ -57,44 +57,59 @@
         }
 
         function handleLogin(event) {
-            event.preventDefault();
+    event.preventDefault();
 
-            var email = $("#email").val();
-            var password = $("#password").val();
+    var email = $("#email").val();
+    var password = $("#password").val();
 
-            if (!email || !password) {
-                return alert("Kolom email dan password harus diisi!");
-            }
+    // Validasi input
+    if (!email || !password) {
+        return alert("Kolom email dan password harus diisi!");
+    }
 
-            $.ajax({
-                url: 'https://api-todo-list-pbw.vercel.app/auth/login',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    email: email,
-                    password: password
-                },
-                beforeSend: function () {
-                    $("#button-login").text("Mohon tunggu...");
-                },
-                success: function (response) {
-                    $("#button-login").text("Login");
+    $.ajax({
+        url: 'https://api-todo-list-pbw.vercel.app/auth/login',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            email: email,
+            password: password
+        },
+        beforeSend: function () {
+            $("#button-login").text("Mohon tunggu...");
+        },
+        success: function (response) {
+            console.log("RESPON LOGIN:", response); // Memeriksa respons login dari server
 
-                    if (response.status) {
-                        localStorage.setItem("token", response.data.token);
-                        localStorage.setItem("email", response.data.email);
+            if (response.status === 200) {
+                // Pastikan _id ada dalam response.data
+                console.log("DATA LOGIN:", response.data);
 
-                        window.location.href = "todo.html";
-                    } else {
-                        alert("Login gagal: " + response.message);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    $("#button-login").text("Login");
-                    $('.response').html('Error: ' + xhr.status + ' - ' + error);
+                // Menyimpan _id sebagai userId di localStorage
+                if (response.data && response.data._id) {
+                    localStorage.setItem("userId", response.data._id); // Menyimpan userId
+                    localStorage.setItem("email", response.data.email);  // Menyimpan email
+                    localStorage.setItem("token", response.data.token);  // Menyimpan token
+
+                    console.log("userId disimpan:", localStorage.getItem("userId")); // Verifikasi penyimpanan userId
+
+                    window.location.href = "todo.html"; // Redirect setelah login sukses
+                } else {
+                    console.error("userId (_id) tidak ditemukan dalam response.");
+                    alert("Login gagal: userId (_id) tidak ditemukan.");
                 }
-            });
+            } else {
+                alert("Login gagal: " + response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.log("Login error:", error);
+            alert("Login error: " + error);
+            $("#button-login").text("Login");
         }
+    });
+}
+        
 
         function handleRegister(event) {
             event.preventDefault();

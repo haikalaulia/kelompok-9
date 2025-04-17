@@ -175,8 +175,51 @@ function saveTodo(button, id) {
 
 
 function logout() {
-    localStorage.clear();
+    // 1. Log sebelum logout
+    console.log("userId sebelum logout:", localStorage.getItem("userId"));
+
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+        console.error("userId tidak ditemukan di localStorage saat logout.");
+        return;
+    }
+
+    try {
+        $.ajax({
+            url: `https://api-todo-list-pbw.vercel.app/auth/logout/${userId}`,
+            method: 'POST',
+            contentType: 'application/json',
+            success: function (response) {
+                // 2. Hapus data
+                localStorage.clear();
+
+                // 3. Log setelah data di-clear
+                console.log("userId setelah logout:", localStorage.getItem("userId"));
+
                 window.location.href = 'index.html';
+            },
+            error: function (xhr, status, error) {
+                console.log("Logout error (tidak masalah).");
+
+                // 2. Hapus data
+                localStorage.clear();
+
+                // 3. Log setelah data di-clear
+                console.log("userId setelah logout (error path):", localStorage.getItem("userId"));
+
+                window.location.href = 'index.html';
+            }
+        });
+    } catch (e) {
+        console.log("Terjadi kesalahan pada logout:", e);
+
+        // 2. Hapus data
+        localStorage.clear();
+
+        // 3. Log setelah data di-clear
+        console.log("userId setelah logout (exception):", localStorage.getItem("userId"));
+
+        window.location.href = 'index.html';
+    }
 }
-    
 
